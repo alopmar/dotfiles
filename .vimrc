@@ -1,74 +1,80 @@
-filetype off
-set nocompatible
-filetype plugin indent on
-set smartindent
-set expandtab
-set tabstop=2
-set shiftwidth=2
-syntax on
-set wrap
-set ruler
-set number
-set list
-set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:< 
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+call neobundle#rc(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Recommended to install
+" After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
+NeoBundle 'Shougo/vimproc'
+
+" My Bundles here:
+"
+" Note: You don't set neobundle setting in .gvimrc!
+" Original repos on github
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'Lokaltog/vim-easymotion', '09c0cea8'   " This plugin is locked at revision 09c0cea8 
+NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+
+" vim-scripts repos
+NeoBundle 'L9'
+NeoBundle 'FuzzyFinder'
+NeoBundle 'rails.vim'
+NeoBundle 'kchmck/vim-coffee-script'
+
+" Non github repos
+NeoBundle 'kien/ctrlp.vim.git'
+
+" gist repos
+" NeoBundle 'https://gist.github.com/656148.git', {
+"       \ 'name': 'everything.vim',
+"       \ 'script_type': 'plugin'}
+" Non git repos
+NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
+NeoBundle 'https://github.com/scrooloose/nerdtree.git'
+NeoBundle 'bling/vim-bufferline'
+" NeoBundle 'git@github.com:Lokaltog/powerline.git'
+NeoBundle 'https://github.com/Lokaltog/powerline-fonts'
+NeoBundle 'bling/vim-airline'
+" NeoBundle 'git@github.com:terryma/vim-multiple-cursors.git'
+
+" if !exists('g:airline_symbols')
+"   let g:airline_symbols = {}
+" endif
+let g:airline_powerline_fonts=1
+" let g:airline_left_sep = '»'
+" let g:airline_left_sep = '▶'
+" let g:airline_right_sep = '«'
+" let g:airline_right_sep = '◀'
+" let g:airline_symbols.linenr = '␊'
+" let g:airline_symbols.linenr = '␤'
+" let g:airline_symbols.linenr = '¶'
+" let g:airline_symbols.branch = '⎇'
+" let g:airline_symbols.paste = 'ρ'
+" let g:airline_symbols.paste = 'Þ'
+" let g:airline_symbols.paste = '∥'
+" let g:airline_symbols.whitespace = 'Ξ'
+" ...
+
+"
+" Brief help
+" :NeoBundleList          - list configured bundles
+" :NeoBundleInstall(!)    - install(update) bundles
+" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+
+" Installation check.
+NeoBundleCheck
+
+augroup config_files
+  source ~/.vim/vim_config.vim
+augroup END
+
 syntax enable
 set background=dark
 colorscheme solarized
+set encoding=utf-8
 
-"{{{Vundle settings
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-Bundle 'gmarik/vundle'
-Bundle 'scrooloose/syntastic'
-Bundle 'edsono/vim-matchit'
-Bundle 'ervandew/supertab'
-Bundle "Townk/vim-autoclose"
-Bundle "tpope/vim-endwise"
-Bundle "tpope/vim-ragtag"
-Bundle "tpope/vim-surround"
-Bundle "kevinw/pyflakes-vim"
-Bundle "applescript.vim"
-Bundle "derekwyatt/vim-scala"
-Bundle "scrooloose/nerdcommenter"
-Bundle "sjl/gundo.vim"
-"}}}
 
-"{{{ Gundo settings
-nmap <leader>U :GundoToggle<cr>
-let g:gundo_preview_bottom = 1
-let g:gundo_preview_height = 10
-let g:gundo_width = 30
-"}}}
-
-set laststatus=2
-let g:syntastic_python_checkers=['flake8']
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-set statusline+=%F
-
-function! HandleURI()
-  let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;:]*')
-  echo s:uri
-  if s:uri != ""
-    exec "!open \"" . s:uri . "\""
-  else
-    echo "No URI found in line."
-  endif
-endfunction
-map <Leader>w :call HandleURI()<CR>
-
-cmap w!! w !sudo tee > /dev/null %
-
-match Todo /\s\+$/
-
-fun! <SID>StripTrailingWhitespaces()
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    call cursor(l, c)
-endfun
-autocmd FileType c,cpp,java,php,ruby,python,puppet autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
-
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd p

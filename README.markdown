@@ -1,3 +1,0 @@
-dotfiles
-========
-alopmar's dotfiles
