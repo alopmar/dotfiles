@@ -1,0 +1,7 @@
+[user]
+	name = Antonio López Martínez
+	email = antonio.lopmar@gmail.com
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
